@@ -12,20 +12,22 @@ private:
 public:
     void push(const T& value) {
         // TODO
+        data.push_back(value);
     }
 
     void pop() {
         // TODO
+        data.pop_back();
     }
 
     T top() const {
         // TODO
-        return T();
+        return data.back();
     }
 
     bool empty() const {
         // TODO
-        return true;
+        return data.empty();
     }
 
     int size() const {
