@@ -1,8 +1,11 @@
 #ifndef ARRAYSTACK_H
 #define ARRAYSTACK_H
 
+#include <iostream>
 #include <vector>
 #include <stdexcept>
+
+using namespace std;
 
 template <typename T>
 class ArrayStack {
@@ -17,11 +20,19 @@ public:
 
     void pop() {
         // TODO
+        if (data.empty()) {
+            std::cout << "Stack is empty" << std::endl;
+            return;
+        }
         data.pop_back();
     }
 
     T top() const {
         // TODO
+        if (data.empty()) {
+            std::cout << "Stack is empty" << std::endl;
+            return;
+        }
         return data.back();
     }
 
