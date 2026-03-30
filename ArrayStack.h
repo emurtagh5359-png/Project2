@@ -31,7 +31,7 @@ public:
         // TODO
         if (data.empty()) {
             std::cout << "Stack is empty" << std::endl;
-            return;
+            return T();
         }
         return data.back();
     }
@@ -43,7 +43,7 @@ public:
 
     int size() const {
         // TODO
-        return 0;
+        return static_cast<int>(data.size());
     }
 };
 
