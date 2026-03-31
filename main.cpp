@@ -54,6 +54,12 @@ bool isOperator(const string& s) {
 
 int precedence(const string& op) {
     // TODO
+    if (op == "+" || op == "-") {
+        return 1;
+    }
+    if (op == "*" || op == "/") {
+        return 2;
+    }
     return 0;
 }
 
@@ -61,12 +67,101 @@ int precedence(const string& op) {
 
 bool isValidPostfix(const vector<Token>& tokens) {
     // TODO
-    return false;
+    if (tokens.empty()) {
+        return false;
+    }
+    int stackSize = 0;
+
+    for (int i = 0; i < tokens.size(); i++) {
+        Token token = tokens[i];
+
+        if (!token.value.empty() && isdigit(token.value[0])) {
+            stackSize++;
+        }
+        else if (isOperator(token.value)) {
+            if (stackSize < 2) {
+                return false;
+            }
+            stackSize--;
+        }
+        else {
+            return false;
+        }
+    }
+    return stackSize == 1;
 }
 
 bool isValidInfix(const vector<Token>& tokens) {
     // TODO
-    return false;
+    if (tokens.empty()) {
+        return false;
+    }
+
+    int parenthesesBalance = 0;
+
+    for (int i = 0; i < tokens.size(); i++) {
+        Token token = tokens[i];
+
+        if (!token.value.empty() && isdigit(token.value[0])) {
+            if (i > 0) {
+                string previous = tokens[i - 1].value;
+                if ((!previous.empty() && isdigit(previous[0])) || previous == ")") {
+                    return false;
+                }
+            }
+        }
+        else if (isOperator(token.value)) {
+            if (i == 0 || i == tokens.size() - 1) {
+                return false;
+            }
+
+            string previous = tokens[i - 1].value;
+            string next = tokens[i + 1].value;
+
+            if (!((!previous.empty() && isdigit(previous[0])) || previous == ")")) {
+                return false;
+            }
+            if (!((!next.empty() && isdigit(next[0])) || next == "(")) {
+                return false;
+            }
+        }
+        else if (token.value == "(") {
+            parenthesesBalance++;
+
+            if (i > 0) {
+                string previous = tokens[i - 1].value;
+                if ((!previous.empty() && isdigit(previous[0])) || previous == ")") {
+                    return false;
+                }
+            }
+        }
+        else if (token.value == ")") {
+            parenthesesBalance--;
+
+            if (parenthesesBalance < 0) {
+                return false;
+            }
+
+            if (i == 0) {
+                return false;
+            }
+
+            string previous = tokens[i - 1].value;
+            if (!((!previous.empty() && isdigit(previous[0])) || previous == ")")) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    string last = tokens[tokens.size() - 1].value;
+    if (!((!last.empty() && isdigit(last[0])) || last == ")")) {
+        return false;
+    }
+    return parenthesesBalance == 0;
 }
 
 // Conversion
