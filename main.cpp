@@ -168,7 +168,40 @@ bool isValidInfix(const vector<Token>& tokens) {
 
 vector<Token> infixToPostfix(const vector<Token>& tokens) {
     vector<Token> output;
+    ArrayStack<Token> stack;
     // TODO
+    for (int i = 0; i < tokens.size(); i++) {
+        Token token = tokens[i];
+
+        if (!token.value.empty() && isdigit(token.value[0])) {
+            output.push_back(token);
+        }
+        else if (token.value == "(") {
+            stack.push(token);
+        }
+        else if (token.value == ")") {
+            while (!stack.empty() && stack.top().value != "(") {
+                output.push_back(stack.top());
+                stack.pop();
+            }
+            if (!stack.empty()) {
+                stack.pop();
+            }
+        }
+        else if (isOperator(token.value)) {
+            while (!stack.empty() && isOperator(stack.top().value) && precedence(stack.top().value) >= precedence(token.value)) {
+                output.push_back(stack.top());
+                stack.pop();
+            }
+
+            stack.push(token);
+        }
+    }
+
+    while (!stack.empty()) {
+        output.push_back(stack.top());
+        stack.pop();
+    }
     return output;
 }
 
@@ -177,7 +210,34 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
 double evalPostfix(const vector<Token>& tokens) {
     ArrayStack<double> stack;
     // TODO
-    return 0.0;
+    for (int i = 0; i < tokens.size(); i++) {
+        Token token = tokens[i];
+
+        if (!token.value.empty() && isdigit(token.value[0])) {
+            stack.push(stod(token.value));
+        }
+        else if (isOperator(token.value)) {
+            double right = stack.top();
+            stack.pop();
+
+            double left = stack.top();
+            stack.pop();
+
+            if (token.value == "+") {
+                stack.push(left + right);
+            }
+            else if (token.value == "-") {
+                stack.push(left - right);
+            }
+            else if (token.value == "*") {
+                stack.push(left * right);
+            }
+            else if (token.value == "/") {
+                stack.push(left / right);
+            }
+        }
+    }
+    return stack.top();
 }
 
 // Main
