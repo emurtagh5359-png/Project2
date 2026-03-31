@@ -28,7 +28,7 @@ vector<Token> tokenize(const string& line) {
                     i++;
                 }
                 tokens.push_back({token});
-
+                i--;
             }
             else if (line[i] == '+' || line[i] == '-' || line[i] == '*'
                 || line[i] == '/' || line[i] == '(' || line[i] == ')') {
