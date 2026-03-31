@@ -19,6 +19,30 @@ struct Token {
 vector<Token> tokenize(const string& line) {
     vector<Token> tokens;
     // TODO
+    for (int i = 0; i < line.length(); i++) {
+        if (!isspace(line[i])) {
+            if (isdigit(line[i])) {
+                string token;
+                while (i < line.length() && isdigit(line[i])) {
+                    token += line[i];
+                    i++;
+                }
+                tokens.push_back({token});
+
+            }
+            else if (line[i] == '+' || line[i] == '-' || line[i] == '*'
+                || line[i] == '/' || line[i] == '(' || line[i] == ')') {
+                string token;
+                token += line[i];
+                tokens.push_back({token});
+            }
+            else {
+                string token;
+                token += line[i];
+                tokens.push_back({token});
+            }
+        }
+    }
     return tokens;
 }
 
